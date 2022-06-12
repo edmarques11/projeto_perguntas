@@ -6,40 +6,49 @@ main() => runApp(const PerguntAPP());
 
 class _PerguntaAppState extends State<PerguntAPP> {
   int _perguntaSelecionada = 0;
+  int _pontuacaoTotal = 0;
 
   final List<Map<String, Object>> _perguntas = const [
     {
       'texto': 'Qual é a sua cor favorita?',
       'respostas': [
-        {'texto': 'Preto', 'nota': 10},
-        {'texto': 'Vermelho', 'nota': 5},
-        {'texto': 'Verde', 'nota': 3},
-        {'texto': 'Branco', 'nota': 1},
+        {'texto': 'Preto', 'pontuacao': 10},
+        {'texto': 'Vermelho', 'pontuacao': 5},
+        {'texto': 'Verde', 'pontuacao': 3},
+        {'texto': 'Branco', 'pontuacao': 1},
       ]
     },
     {
       'texto': 'Qual é o seu animal favorito?',
       'respostas': [
-        {'texto': 'Bode', 'nota': 10},
-        {'texto': 'Pato', 'nota': 5},
-        {'texto': 'Coruja', 'nota': 3},
-        {'texto': 'Calango de preguiça', 'nota': 1},
+        {'texto': 'Bode', 'pontuacao': 10},
+        {'texto': 'Pato', 'pontuacao': 5},
+        {'texto': 'Coruja', 'pontuacao': 3},
+        {'texto': 'Calango de preguiça', 'pontuacao': 1},
       ]
     },
     {
       'texto': 'Qual é o seu instrutor favorito?',
       'respostas': [
-        {'texto': 'Maria', 'nota': 10},
-        {'texto': 'João', 'nota': 5},
-        {'texto': 'Pedro', 'nota': 3},
-        {'texto': 'Alberto', 'nota': 1},
+        {'texto': 'Maria', 'pontuacao': 10},
+        {'texto': 'João', 'pontuacao': 5},
+        {'texto': 'Pedro', 'pontuacao': 3},
+        {'texto': 'Alberto', 'pontuacao': 1},
       ]
     }
   ];
 
-  void _responder() {
+  void _responder(int pontuacao) {
     setState(() {
       _perguntaSelecionada++;
+      _pontuacaoTotal += pontuacao;
+    });
+  }
+
+  void _reiniciarQuestionario() {
+    setState(() {
+      _perguntaSelecionada = 0;
+      _pontuacaoTotal = 0;
     });
   }
 
@@ -59,7 +68,8 @@ class _PerguntaAppState extends State<PerguntAPP> {
                 perguntas: _perguntas,
                 perguntaSelecionada: _perguntaSelecionada,
                 responder: _responder)
-            : const Resultado('Parabéns!', Key('result')),
+            : Resultado(
+                _pontuacaoTotal, _reiniciarQuestionario, const Key('result')),
       ),
     );
   }
