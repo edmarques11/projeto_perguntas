@@ -1,22 +1,36 @@
 import 'package:flutter/material.dart';
-import './questao.dart';
+import './questionario.dart';
+import './resultado.dart';
 
 main() => runApp(const PerguntAPP());
 
 class _PerguntaAppState extends State<PerguntAPP> {
   int _perguntaSelecionada = 0;
 
+  final List<Map<String, Object>> _perguntas = const [
+    {
+      'texto': 'Qual é a sua cor favorita?',
+      'respostas': ['Preto', 'Vermelho', 'Verde', 'Branco']
+    },
+    {
+      'texto': 'Qual é o seu animal favorito?',
+      'respostas': ['Bode', 'Pato', 'Coruja', 'Calango de preguiça']
+    },
+    {
+      'texto': 'Qual é o seu instrutor favorito?',
+      'respostas': ['Maria', 'João', 'Pedro', 'Alberto']
+    }
+  ];
+
   void _responder() {
     setState(() {
-      if ((perguntas.length - 1) > _perguntaSelecionada) _perguntaSelecionada++;
+      _perguntaSelecionada++;
     });
-    print(_perguntaSelecionada);
   }
 
-  final List<String> perguntas = [
-    'Qual é a sua cor favorita?',
-    'Qual é o seu animal favorito?',
-  ];
+  bool get _temPerguntaSelecionada {
+    return _perguntaSelecionada < _perguntas.length;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,23 +39,12 @@ class _PerguntaAppState extends State<PerguntAPP> {
         appBar: AppBar(
           title: const Text('Perguntas'),
         ),
-        body: Column(
-          children: [
-            Questao(perguntas[_perguntaSelecionada], const Key('1')),
-            ElevatedButton(
-              onPressed: _responder,
-              child: const Text("Resposta 1"),
-            ),
-            ElevatedButton(
-              onPressed: _responder,
-              child: const Text('Resposta 2'),
-            ),
-            ElevatedButton(
-              onPressed: _responder,
-              child: const Text('Resposta 3'),
-            ),
-          ],
-        ),
+        body: _temPerguntaSelecionada
+            ? Questionario(
+                perguntas: _perguntas,
+                perguntaSelecionada: _perguntaSelecionada,
+                responder: _responder)
+            : const Resultado('Parabéns!', Key('result')),
       ),
     );
   }
